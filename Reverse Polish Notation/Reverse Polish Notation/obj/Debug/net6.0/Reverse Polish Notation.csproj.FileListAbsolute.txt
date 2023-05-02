@@ -1,0 +1,15 @@
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.csproj.AssemblyReference.cache
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.GeneratedMSBuildEditorConfig.editorconfig
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.AssemblyInfoInputs.cache
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.AssemblyInfo.cs
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.csproj.CoreCompileInputs.cache
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\bin\Debug\net6.0\Reverse Polish Notation.exe
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\bin\Debug\net6.0\Reverse Polish Notation.deps.json
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\bin\Debug\net6.0\Reverse Polish Notation.runtimeconfig.json
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\bin\Debug\net6.0\Reverse Polish Notation.dll
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\bin\Debug\net6.0\Reverse Polish Notation.pdb
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.dll
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\refint\Reverse Polish Notation.dll
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.pdb
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\Reverse Polish Notation.genruntimeconfig.cache
+D:\учеба\курса\Reverse Polish notation\Reverse Polish Notation\Reverse Polish Notation\obj\Debug\net6.0\ref\Reverse Polish Notation.dll

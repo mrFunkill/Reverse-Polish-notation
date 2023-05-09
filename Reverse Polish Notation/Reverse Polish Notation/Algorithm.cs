@@ -6,177 +6,100 @@ using System.Threading.Tasks;
 
 namespace Reverse_Polish_Notation
 {
-    class Algorithm
+    internal class Algorithm
     {
-        //	Хранит инфиксное выражение
-        public string infixExpr { get; private set; }
-        //	Хранит постфиксное выражение
-        public string postfixExpr { get; private set; }
-
-        //	Список и приоритет операторов
-        private Dictionary<char, int> operationPriority = new() {
-        {'(', 0},
-        {'+', 1},
-        {'-', 1},
-        {'*', 2},
-        {'/', 2},
-        {'^', 3},
-        {'~', 4}	//	Унарный минус
-        };
-        public Algorithm(string expression) {
-            //	Инициализируем поля
-            infixExpr = expression;
-            postfixExpr = ToPostfix(infixExpr + "\r");
-        }
-        private string GetStringNumber(string expr, ref int pos)
+        //Метод возвращает true, если проверяемый символ - разделитель ("пробел" или "равно")
+        static private bool IsDelimeter(char c)
         {
-            //	Хранит число
-            string strNumber = "";
-
-            //	Перебираем строку
-            for (; pos < expr.Length; pos++)
+            if ((" =".IndexOf(c) != -1))
+                return true;
+            return false;
+        }
+        //Метод возвращает true, если проверяемый символ - оператор
+        static private bool IsOperator(char с)
+        {
+            if (("+-/*^()".IndexOf(с) != -1))
+                return true;
+            return false;
+        }
+        //Метод возвращает приоритет оператора
+        static private byte GetPriority(char s)
+        {
+            switch (s)
             {
-                //	Разбираемый символ строки
-                char num = expr[pos];
-
-                //	Проверяем, является символ числом
-                if (Char.IsDigit(num))
-                    //	Если да - прибавляем к строке
-                    strNumber += num;
-                else
-                {
-                    //	Если нет, то перемещаем счётчик к предыдущему символу
-                    pos--;
-                    //	И выходим из цикла
-                    break;
-                }
+                case '(': return 0;
+                case ')': return 1;
+                case '+': return 2;
+                case '-': return 3;
+                case '*': return 4;
+                case '/': return 4;
+                case '^': return 5;
+                default: return 6;
             }
-
-            //	Возвращаем число
-            return strNumber;
         }
-        private string ToPostfix(string infixExpr)
-        {
-            //	Выходная строка, содержащая постфиксную запись
-            string postfixExpr = "";
-            //	Инициализация стека, содержащий операторы в виде символов
-            Stack<char> stack = new();
 
-            //	Перебираем строку
-            for (int i = 0; i < infixExpr.Length; i++)
+        static public string GetExpression(string input)
+        {
+            string output = string.Empty; //Строка для хранения выражения
+            Stack<char> operStack = new Stack<char>(); //Стек для хранения операторов
+
+            for (int i = 0; i < input.Length; i++) //Для каждого символа в входной строке
             {
-                //	Текущий символ
-                char c = infixExpr[i];
+                //Разделители пропускаем
+                if (IsDelimeter(input[i]))
+                    continue; //Переходим к следующему символу
 
-                //	Если симовол - цифра
-                if (Char.IsDigit(c))
+                //Если символ - цифра, то считываем все число
+                if (Char.IsDigit(input[i]) || !IsOperator(input[i])) //Если цифра или символ
                 {
-                    //	Парсии его, передав строку и текущую позицию, и заносим в выходную строку
-                    postfixExpr += GetStringNumber(infixExpr, ref i) + " ";
-                }
-                //	Если открывающаяся скобка 
-                else if (c == '(')
-                {
-                    //	Заносим её в стек
-                    stack.Push(c);
-                }
-                //	Если закрывающая скобка
-                else if (c == ')')
-                {
-                    //	Заносим в выходную строку из стека всё вплоть до открывающей скобки
-                    while (stack.Count > 0 && stack.Peek() != '(')
-                        postfixExpr += stack.Pop();
-                    //	Удаляем открывающуюся скобку из стека
-                    stack.Pop();
-                }
-                //	Проверяем, содержится ли символ в списке операторов
-                else if (operationPriority.ContainsKey(c))
-                {
-                    //	Если да, то сначала проверяем
-                    char op = c;
-                    //	Является ли оператор унарным символом
-                    if (op == '-' && (i == 0 || (i > 1 && operationPriority.ContainsKey(infixExpr[i - 1]))))
-                        //	Если да - преобразуем его в тильду
-                        op = '~';
-
-                    //	Заносим в выходную строку все операторы из стека, имеющие более высокий приоритет
-                    while (stack.Count > 0 && (operationPriority[stack.Peek()] >= operationPriority[op]))
-                        postfixExpr += stack.Pop();
-                    //	Заносим в стек оператор
-                    stack.Push(op);
-                }
-            }
-            //	Заносим все оставшиеся операторы из стека в выходную строку
-            foreach (char op in stack)
-                postfixExpr += op;
-
-            //	Возвращаем выражение в постфиксной записи
-            return postfixExpr;
-        }
-        private double Execute(char op, double first, double second) => op switch
-        {
-            '+' => first + second,                  //	Сложение
-            '-' => first - second,                  //	Вычитание
-            '*' => first * second,                  //	Умножение
-            '/' => first / second,                  //	Деление
-            '^' => Math.Pow(first, second), //	Степень
-            _ => 0  //	Возвращает, если не был найден подходящий оператор
-        };
-        public double Calc()
-        {
-            //	Стек для хранения чисел
-            Stack<double> locals = new();
-            //	Счётчик действий
-            int counter = 0;
-
-            //	Проходим по строке
-            for (int i = 0; i < postfixExpr.Length; i++)
-            {
-                //	Текущий символ
-                char c = postfixExpr[i];
-
-                //	Если символ число
-                if (Char.IsDigit(c))
-                {
-                    //	Парсим
-                    string number = GetStringNumber(postfixExpr, ref i);
-                    //	Заносим в стек, преобразовав из String в Double-тип
-                    locals.Push(Convert.ToDouble(number));
-                }
-                //	Если символ есть в списке операторов
-                else if (operationPriority.ContainsKey(c))
-                {
-                    //	Прибавляем значение счётчику
-                    counter += 1;
-                    //	Проверяем, является ли данный оператор унарным
-                    if (c == '~')
+                    //Читаем до разделителя или оператора, чтобы получить число
+                    while (!IsDelimeter(input[i]) && !IsOperator(input[i]))
                     {
-                        //	Проверяем, пуст ли стек: если да - задаём нулевое значение,
-                        //	еси нет - выталкиваем из стека значение
-                        double last = locals.Count > 0 ? locals.Pop() : 0;
+                        output += input[i]; //Добавляем каждую цифру числа к нашей строке
+                        i++; //Переходим к следующему символу
 
-                        //	Получаем результат операции и заносим в стек
-                        locals.Push(Execute('-', 0, last));
-                        //	Отчитываемся пользователю о проделанной работе
-                        Console.WriteLine($"{counter}) {c}{last} = {locals.Peek()}");
-                        //	Указываем, что нужно перейти к следующей итерации цикла
-                        //	 для того, чтобы пропустить остальной код
-                        continue;
+                        if (i == input.Length) break; //Если символ - последний, то выходим из цикла
                     }
 
-                    //	Получаем значения из стека в обратном порядке
-                    double second = locals.Count > 0 ? locals.Pop() : 0,
-                    first = locals.Count > 0 ? locals.Pop() : 0;
+                    output += " "; //Дописываем после числа пробел в строку с выражением
+                    i--; //Возвращаемся на один символ назад, к символу перед разделителем
+                }
 
-                    //	Получаем результат операции и заносим в стек
-                    locals.Push(Execute(c, first, second));
-                    //	Отчитываемся пользователю о проделанной работе
-                    Console.WriteLine($"{counter}) {first} {c} {second} = {locals.Peek()}");
+                //Если символ - оператор
+                if (IsOperator(input[i])) //Если оператор
+                {
+                    if (input[i] == '(') //Если символ - открывающая скобка
+                        operStack.Push(input[i]); //Записываем её в стек
+                    else if (input[i] == ')') //Если символ - закрывающая скобка
+                    {
+                        //Выписываем все операторы до открывающей скобки в строку
+                        char s = operStack.Pop();
+
+                        while (s != '(')
+                        {
+                            output += s.ToString() + ' ';
+                            s = operStack.Pop();
+                        }
+
+                    }
+                    else //Если любой другой оператор
+                    {
+                        if (operStack.Count > 0) //Если в стеке есть элементы
+                            if (GetPriority(input[i]) <= GetPriority(operStack.Peek())) //И если приоритет нашего оператора меньше или равен приоритету оператора на вершине стека
+                                output += operStack.Pop().ToString() + " "; //То добавляем последний оператор из стека в строку с выражением
+
+                        operStack.Push(char.Parse(input[i].ToString())); //Если стек пуст, или же приоритет оператора выше - добавляем операторов на вершину стека
+
+                    }
                 }
             }
 
-            //	По завершению цикла возвращаем результат из стека
-            return locals.Pop();
+            //Когда прошли по всем символам, выкидываем из стека все оставшиеся там операторы в строку
+            while (operStack.Count > 0)
+                output += operStack.Pop() + " ";
+
+            return output; //Возвращаем выражение в постфиксной записи
+
         }
     }
 }

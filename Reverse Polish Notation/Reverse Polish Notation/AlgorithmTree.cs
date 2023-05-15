@@ -60,7 +60,7 @@ namespace Reverse_Polish_Notation
 
             foreach (string token in tokens)
             {
-                if (IsDigit(token))
+                if (IsDigit(token)|| !IsOperator(token))
                 {
                     stack.Push(new Node(token));
                 }
@@ -127,7 +127,7 @@ namespace Reverse_Polish_Notation
 
             foreach (string token in tokens)
             {
-                if (IsDigit(token))
+                if (IsDigit(token)||!IsOperator(token))
                 {
                     outputQueue.Add(token);
                 }
@@ -170,7 +170,7 @@ namespace Reverse_Polish_Notation
         {
             List<string> tokens = ConvertToReversePolishNotation(expression);
             Node expressionTree = BuildExpressionTree(tokens);
-            return TraverseExpressionTree(expressionTree);
+            return TraverseExpressionTree(expressionTree) + "\nРезультат вычисления:" + Convert.ToString(Calculate(expressionTree));
         }
 
         /// <summary>
@@ -195,6 +195,42 @@ namespace Reverse_Polish_Notation
             else
             {
                 return node.value;
+            }
+        }
+
+        /// <summary>
+        /// Вычисление формулы в обратной польской записи деревом
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static double Calculate(Node node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            if (double.TryParse(node.value, out double result))
+            {
+                return result;
+            }
+
+            double leftValue = Calculate(node.left);
+            double rightValue = Calculate(node.right);
+
+            switch (node.value)
+            {
+                case "+":
+                    return leftValue + rightValue;
+                case "-":
+                    return leftValue - rightValue;
+                case "*":
+                    return leftValue * rightValue;
+                case "/":
+                    return leftValue / rightValue;
+                default:
+                    return 0;
             }
         }
     }

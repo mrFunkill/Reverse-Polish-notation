@@ -17,6 +17,7 @@ namespace Reverse_Polish_Notation
         {
 
             string menu = string.Empty;
+            string expression = string.Empty;
             while (menu!="3")
             {
                 Console.Clear();
@@ -26,15 +27,22 @@ namespace Reverse_Polish_Notation
                 {
                     case "1":
                         Console.Clear();
-                        if (FileReader.Read() != null) Console.WriteLine(AlgorithmStack.GetExpression(FileReader.Read()));
+                        if (FileReader.Read() != null) {
+                            expression = AlgorithmStack.GetExpression(FileReader.Read());
+                            Console.WriteLine("Обратная запись:" + expression);
+                            Console.WriteLine("Результат вычисления:" + AlgorithmStack.Calculate(expression));
+                        }
                         else Console.WriteLine("Файл пустой");
                         Console.WriteLine("Нажмите клавиши, чтобы продолжить...");
                         Console.ReadKey();
                         break;
                     case "2":
                         Console.Clear();
-                        Console.Write("Введите выражение:");
-                        if (FileReader.Read() != null) Console.WriteLine(AlgorithmTree.ConvertToReversePolishNotationString(FileReader.Read()));
+                        if (FileReader.Read() != null)
+                        { 
+                            Console.WriteLine("Обратная запись:" + AlgorithmTree.ConvertToReversePolishNotationString(FileReader.Read()));
+                            Console.WriteLine();
+                        }
                         else Console.WriteLine("Файл пустой");
                         Console.WriteLine("Нажмите клавиши, чтобы продолжить...");
                         Console.ReadKey();

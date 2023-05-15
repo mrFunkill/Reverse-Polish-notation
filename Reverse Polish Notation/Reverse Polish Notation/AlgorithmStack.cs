@@ -96,5 +96,65 @@ namespace Reverse_Polish_Notation
             return output;
 
         }
+        /// <summary>
+        /// Вычисление формулы в обратной польской записи стэком
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static double Calculate(string expression)
+        {
+            Stack<double> stack = new Stack<double>();
+
+            string[] tokens = expression.Split(' ');
+
+            foreach (string token in tokens)
+            {
+                if (token == "") break;
+                if (double.TryParse(token, out double number)||!IsOperator(Convert.ToChar(token)))
+                {
+                    stack.Push(number);
+                }
+                else if (IsOperator(Convert.ToChar(token)))
+                {
+                    if (stack.Count < 2)
+                    {
+                        throw new ArgumentException("Invalid expression.");
+                    }
+
+                    double right = stack.Pop();
+                    double left = stack.Pop();
+
+                    switch (token)
+                    {
+                        case "+":
+                            stack.Push(left + right);
+                            break;
+                        case "-":
+                            stack.Push(left - right);
+                            break;
+                        case "*":
+                            stack.Push(left * right);
+                            break;
+                        case "/":
+                            stack.Push(left / right);
+                            break;
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid expression.");
+                }
+            }
+
+            if (stack.Count == 1)
+            {
+                return stack.Pop();
+            }
+            else
+            {
+                throw new ArgumentException("Invalid expression.");
+            }
+        }
     }
 }

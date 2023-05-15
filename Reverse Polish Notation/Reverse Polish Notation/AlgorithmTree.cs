@@ -53,7 +53,7 @@ namespace Reverse_Polish_Notation
         /// Создание бинарного дерева
         /// </summary>
         /// <param name="tokens"></param>
-        /// <returns></returns>
+        /// <returns></returns> 
         private static Node BuildExpressionTree(List<string> tokens)
         {
             Stack<Node> stack = new Stack<Node>();

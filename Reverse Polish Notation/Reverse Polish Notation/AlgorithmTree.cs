@@ -60,7 +60,7 @@ namespace Reverse_Polish_Notation
 
             foreach (string token in tokens)
             {
-                if (IsDigit(token)|| !IsOperator(token))
+                if (IsDigit(token))
                 {
                     stack.Push(new Node(token));
                 }
@@ -91,7 +91,7 @@ namespace Reverse_Polish_Notation
                 if (IsDelimeter(input[i]))
                     continue; 
 
-                if (Char.IsDigit(input[i]) || !IsOperator(input[i]))
+                if (Char.IsDigit(input[i]))
                 {
                     while (!IsDelimeter(input[i]) && !IsOperator(input[i]))
                     {
@@ -127,7 +127,7 @@ namespace Reverse_Polish_Notation
 
             foreach (string token in tokens)
             {
-                if (IsDigit(token)||!IsOperator(token))
+                if (IsDigit(token))
                 {
                     outputQueue.Add(token);
                 }
